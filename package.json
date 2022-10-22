@@ -1,0 +1,35 @@
+{
+  "dependencies": {
+	"@discordjs/collection": "^1.2.0",
+	"@types/qrcode": "^1.5.0",
+	"@types/yargs-parser": "^21.0.0",
+	"better-sqlite3": "^7.6.2",
+	"chalk": "4",
+	"dotenv": "^16.0.3",
+	"eslint": "8.25.0",
+	"glob": "^8.0.3",
+	"mime-types": "^2.1.35",
+	"normalize-path": "^3.0.0",
+	"qrcode": "^1.5.1",
+	"quick.db": "^9.0.6",
+	"quickmongo": "^5.2.0",
+	"typescript": "^4.8.4",
+	"undici": "^5.11.0",
+	"whatsapp-web.js": "^1.18.0",
+	"yargs-parser": "^21.1.1"
+  },
+  "devDependencies": {
+	"@types/glob": "^7.2.0",
+	"@types/mime-types": "^2.1.1",
+	"@types/normalize-path": "^3.0.0",
+	"@types/qrcode-terminal": "^0.12.0",
+	"@typescript-eslint/eslint-plugin": "^5.33.0",
+	"@typescript-eslint/parser": "^5.33.0"
+  },
+  "scripts": {
+	"build": "yarn clean && tsc",
+	"clean": "rimraf dist",
+	"dev": "yarn build && node dist/src/index.js",
+	"start": "yarn dev"
+  }
+}

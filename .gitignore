@@ -1,0 +1,10 @@
+dmt.sh
+node_modules
+.wwebjs_auth
+dist
+yarn.lock
+tsconfig.tsbuildinfo
+snipes
+json.sqlite
+.idea
+.env
