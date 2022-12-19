@@ -1,10 +1,12 @@
-import { Listener } from '../../lib/structures/Listener';
-import qrcode from 'qrcode';
+import { Listener } from "../../lib/structures/Listener";
+import type WAClient from "../../lib/structures/Client";
+import qrcode from "qrcode";
 
 new Listener({
-	name: 'qr',
-	run: (qr: string) => {
-		qrcode.toString(qr, { type: 'terminal' }, function(_, url) {
+	name: "qr",
+	run: (client: WAClient, qr: string) => {
+		qrcode.toString(qr, { type: "terminal", small: true }, function(_, url) {
+			client.log.info("Generated QR Code:");
 			console.log(url);
 		});
 	},

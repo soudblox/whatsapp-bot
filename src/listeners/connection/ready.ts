@@ -1,11 +1,10 @@
-import type WAClient from 'src/lib/structures/Client';
-import { Listener } from '../../lib/structures/Listener';
-import chalk from 'chalk';
+import type WAClient from "src/lib/structures/Client";
+import { Listener } from "../../lib/structures/Listener";
 
 new Listener({
-	name: 'ready',
+	name: "ready",
 	async run(client: WAClient) {
 		await client.database.connect();
-		console.log(chalk.green('[READY]'), `${chalk.cyan('Client')} ${chalk.blue('is Ready	')}`);
+		client.log.success("[CONNECTION] Successfully logged in WhatsApp");
 	},
 });

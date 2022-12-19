@@ -1,6 +1,6 @@
-import type WAClient from './Client';
-import type { CommandContext } from './CommandContext';
-import { Commands } from '../managers/CommandManager';
+import type WAClient from "./Client";
+import type { CommandContext } from "./CommandContext";
+import { Commands } from "../managers/CommandManager";
 
 export interface CommandOptions {
 	name: string;
@@ -22,11 +22,11 @@ export class Command {
 
 	public constructor(options: CommandOptions) {
 		if (options.run) this.run = options.run;
-		this.name = options.name || '';
+		this.name = options.name || "";
 		this.description = options.description || options.name;
 		this.universal = options.universal || false;
 		this.aliases = options.aliases || [];
-		this.category = options.category || 'uncategorized';
+		this.category = options.category || "uncategorized";
 
 		Commands.register(this);
 	}

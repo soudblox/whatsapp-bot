@@ -1,6 +1,6 @@
-import { promisify } from 'node:util';
-import glob from 'glob';
-import normalize from 'normalize-path';
+import { promisify } from "node:util";
+import glob from "glob";
+import normalize from "normalize-path";
 const globPromise = promisify(glob);
 
 export async function loadAll() {

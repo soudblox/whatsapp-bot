@@ -1,5 +1,5 @@
-import { Listeners } from '../managers/ListenerManager';
-import type WAClient from './Client';
+import { Listeners } from "../managers/ListenerManager";
+import type WAClient from "./Client";
 
 interface ListenerOptions {
 	name: string;
@@ -26,7 +26,7 @@ export class Listener {
 	public initialize(client: WAClient): void {
 		this.client = client;
 
-		client[this.once ? 'once' : 'on'](
+		client[this.once ? "once" : "on"](
 			this.name,
 			this._run.bind(this),
 		);
