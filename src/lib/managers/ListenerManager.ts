@@ -1,17 +1,16 @@
-import type WAClient from '../structures/Client';
-import { Listener } from '../structures/Listener';
-import { Collection } from '@discordjs/collection';
-import chalk from 'chalk';
+import type WAClient from "../structures/Client";
+import { Listener } from "../structures/Listener";
+import { Collection } from "@discordjs/collection";
 
 export class ListenerManager extends Collection<string, Listener> {
 	private client!: WAClient;
 
 	public register(listener: Listener): ListenerManager {
 		// noinspection SuspiciousTypeOfGuard
-		if (!(listener instanceof Listener)) throw new Error('Listener must be an instance of Listener.');
+		if (!(listener instanceof Listener)) throw new Error("Listener must be an instance of Listener.");
 		if (this.client) this.initialize(listener);
 		this.set(listener.name, listener);
-		console.log(`${chalk.green('Registered')} ${chalk.blue('Listener')} ${chalk.cyan(listener.name)}`);
+		this.client.log.info(`[MANAGER] Registered listener ${listener.name}`);
 		return this;
 	}
 
@@ -30,7 +29,7 @@ export class ListenerManager extends Collection<string, Listener> {
 				);
 			}
 
-			console.log(`Unregistered listener ${listener.name}`);
+			this.client.log.info(`[MANAGER] Unregistered listener ${listener.name}`);
 		}
 
 		return listener;

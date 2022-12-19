@@ -1,16 +1,15 @@
-import { Command } from '../structures/Command';
-import { Collection } from '@discordjs/collection';
-import type WAClient from '../structures/Client';
-import chalk from 'chalk';
+import { Command } from "../structures/Command";
+import { Collection } from "@discordjs/collection";
+import type WAClient from "../structures/Client";
 
 export class CommandManager extends Collection<string, Command> {
 	private client!: WAClient;
 
 	public register(command: any): CommandManager {
-		if (!(command instanceof Command)) throw new Error('Command must be an instance of Command.');
+		if (!(command instanceof Command)) throw new Error("Command must be an instance of Command.");
 		if (this.client) command.initialize(this.client);
 		this.set(command.name, command);
-		console.log(`${chalk.green('Registered')} ${chalk.cyan('Command')} ${chalk.blue(command.name)}`);
+		this.client.log.info(`[MANAGER] Registered command ${command.name}`);
 		return this;
 	}
 
@@ -18,7 +17,7 @@ export class CommandManager extends Collection<string, Command> {
 		const command = this.get(commandName);
 		if (command) {
 			this.delete(commandName);
-			console.log(`Unregistered command ${command.name}`);
+			this.client.log.info(`[MANAGER] Unregistered command ${command.name}`);
 		}
 
 		return command;

@@ -8,3 +8,4 @@ snipes
 json.sqlite
 .idea
 .env
+logs

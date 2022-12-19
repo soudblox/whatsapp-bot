@@ -1,14 +1,13 @@
-import { Listener } from '../../lib/structures/Listener';
-import type WAClient from '../../lib/structures/Client';
-import type { Message, MessageId } from 'whatsapp-web.js';
-import { MessageMedia, MessageTypes } from 'whatsapp-web.js';
-import { extension } from 'mime-types';
-import fs from 'node:fs';
+import { Listener } from "../../lib/structures/Listener";
+import type WAClient from "../../lib/structures/Client";
+import type { Message, MessageId } from "whatsapp-web.js";
+import { MessageMedia, MessageTypes } from "whatsapp-web.js";
+import { extension } from "mime-types";
+import fs from "node:fs";
 
 new Listener({
-	name: 'message_revoke_everyone',
+	name: "message_revoke_everyone",
 	async run(client: WAClient, message: Message, revoked: Message) {
-		console.log('test');
 		const data = message.rawData as any;
 		const group = message.fromMe ? message.to : message.from;
 		if (!client.config.allowFeatures.snipes.includes((group))) return;
@@ -18,10 +17,10 @@ new Listener({
 			if (fs.existsSync(`./snipes/${message.timestamp}.${ext}`)) revoked.picture = MessageMedia.fromFilePath(`./snipes/${message.timestamp}.${ext}`);
 		}
 
-		const snipeCount = await client.database.add('snipeCount', 1);
+		const snipeCount = await client.database.add("snipeCount", 1);
 		console.log(await client.database.set(`snipe${snipeCount}`, {
-			notifyName: data.notifyName || '',
-			mimetype: data.mimetype || '',
+			notifyName: data.notifyName || "",
+			mimetype: data.mimetype || "",
 			id: revoked.id,
 			body: revoked.body,
 			type: revoked.type,

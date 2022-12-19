@@ -1,12 +1,11 @@
-import type { GroupChat, Message } from 'whatsapp-web.js';
-import { MessageTypes } from 'whatsapp-web.js';
-import type WAClient from '../../lib/structures/Client';
-import { Listener } from '../../lib/structures/Listener';
-import { prefix } from '../../config';
-import { CommandContext } from '../../lib/structures/CommandContext';
-import { extension } from 'mime-types';
-import fs from 'node:fs';
-import chalk from 'chalk';
+import type { GroupChat, Message } from "whatsapp-web.js";
+import { MessageTypes } from "whatsapp-web.js";
+import type WAClient from "../../lib/structures/Client";
+import { Listener } from "../../lib/structures/Listener";
+import { prefix } from "../../config";
+import { CommandContext } from "../../lib/structures/CommandContext";
+import { extension } from "mime-types";
+import fs from "node:fs";
 
 interface User {
 	name: string;
@@ -19,12 +18,12 @@ interface User {
 }
 
 new Listener({
-	name: 'message_create',
+	name: "message_create",
 	async run(client: WAClient, message: Message) {
 		handleMessage(client, message)
 			.then()
 			.catch((err) => {
-				console.error(err);
+				client.log.error(`[COMMANDS] Error: ${err.toString()}`);
 			});
 	},
 });
@@ -37,8 +36,8 @@ async function handleMessage(client: WAClient, message: Message) {
 	const content = message.caption || message.body;
 	message.content = content;
 	const group = message.fromMe ? message.to : message.from;
-	const userId: string = message.fromMe ? message.from : message.author || '00000000@c';
-	const username = message.contact.name || message.contact.pushname || 'Unknown';
+	const userId: string = message.fromMe ? message.from : message.author || "00000000@c";
+	const username = message.contact.name || message.contact.pushname || "Unknown";
 	message.user = {
 		id: userId,
 		name: username,
@@ -60,10 +59,10 @@ async function handleMessage(client: WAClient, message: Message) {
 		const ctx = new CommandContext(message, client, args);
 		await Promise.resolve(command.run(ctx))
 			.then(async () => {
-				console.log(chalk.green('[COMMANDS]'), `${username} (${await client.getFormattedNumber(contact.number)}) used the command`, chalk.blue(command.name));
+				client.log.info(`[COMMANDS] ${username} (${await client.getFormattedNumber(contact.number)}) used the command ${command.name}`);
 			})
 			.catch((err) => {
-				console.log(err);
+				client.log.error(`[COMMANDS] Error: ${err.toString()}`);
 				return message.reply(`An error has occurred while executing the command ${command.name}`);
 			});
 	}
@@ -79,11 +78,11 @@ async function handleMessage(client: WAClient, message: Message) {
 		}
 
 		if (message.type === MessageTypes.STICKER && media) {
-			gc?.sendMessage(`${message.isForwarded ? `_Forwarded ${message.forwardingScore} times_\n` : ''}${contact.name || contact.pushname || 'unknown'} sent a sticker in ${fetched.name}`);
+			gc?.sendMessage(`${message.isForwarded ? `_Forwarded ${message.forwardingScore} times_\n` : ""}${contact.name || contact.pushname || "unknown"} sent a sticker in ${fetched.name}`);
 			return gc?.sendMessage(media, { sendMediaAsSticker: true, sendSeen: false });
 		}
 
-		return gc?.sendMessage(`${message.isForwarded ? `_Forwarded ${message.forwardingScore} times_\n` : ''}${message.caption ? 'Message' : 'Media'} from ${fetched.name}:${message.caption ? `\n\n${contact.name || contact.pushname || 'unknown'}: ${content}` : ''}`, {
+		return gc?.sendMessage(`${message.isForwarded ? `_Forwarded ${message.forwardingScore} times_\n` : ""}${message.caption ? "Message" : "Media"} from ${fetched.name}:${message.caption ? `\n\n${contact.name || contact.pushname || "unknown"}: ${content}` : ""}`, {
 			sendSeen: false,
 			parseVCards: true,
 			media,
@@ -95,11 +94,11 @@ async function handleMessage(client: WAClient, message: Message) {
 			const media = await message.downloadMedia();
 			const ext = extension(media.mimetype);
 
-			if (fs.existsSync('./snipes/')) {
-				fs.writeFileSync(`./snipes/${message.timestamp}.${ext}`, media.data, { encoding: 'base64' });
+			if (fs.existsSync("./snipes/")) {
+				fs.writeFileSync(`./snipes/${message.timestamp}.${ext}`, media.data, { encoding: "base64" });
 			} else {
-				fs.mkdirSync('./snipes');
-				fs.writeFileSync(`./snipes/${message.timestamp}.${ext}`, media.data, { encoding: 'base64' });
+				fs.mkdirSync("./snipes");
+				fs.writeFileSync(`./snipes/${message.timestamp}.${ext}`, media.data, { encoding: "base64" });
 			}
 		}
 	}
@@ -107,7 +106,7 @@ async function handleMessage(client: WAClient, message: Message) {
 	if (allowFeatures.messages.includes(group)) {
 		// message counter
 		if (!client.database.ready) return;
-		const user: User | undefined = await client.database.get(userId.replace('@c.us', '@c'));
+		const user: User | undefined = await client.database.get(userId.replace("@c.us", "@c"));
 		const currentMessages = user?.messages?.[group] || {
 			total: 0,
 			daily: 0,
@@ -115,7 +114,7 @@ async function handleMessage(client: WAClient, message: Message) {
 			monthly: 0,
 		};
 
-		await client.database.set(userId.replace('@c.us', '@c'), {
+		await client.database.set(userId.replace("@c.us", "@c"), {
 			name: username,
 			messages: {
 				[group]: {
