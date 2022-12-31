@@ -5,6 +5,7 @@ import parser from "yargs-parser";
 new Command({
 	name: "google",
 	description: "Search Google from WhatsApp",
+	category: "search",
 	async run(ctx) {
 		const { args, client } = ctx;
 		if (args.length < 1) return ctx.reply("You need to provide a query you pea brain	");
@@ -153,7 +154,7 @@ new Command({
 		} catch (err) {
 			const error = err as any;
 			if (error.code === 429) return ctx.reply("API key has expired, please let me know so it can be updated.");
-			console.log(error);
+			client.log.error(error);
 			return ctx.reply("An error has occurred whilst trying to search.");
 		}
 		return "e";
