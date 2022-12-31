@@ -18,7 +18,7 @@ new Listener({
 		}
 
 		const snipeCount = await client.database.add("snipeCount", 1);
-		console.log(await client.database.set(`snipe${snipeCount}`, {
+		await client.database.set(`snipe${snipeCount}`, {
 			notifyName: data.notifyName || "",
 			mimetype: data.mimetype || "",
 			id: revoked.id,
@@ -36,7 +36,7 @@ new Listener({
 			isGif: revoked.isGif,
 			links: revoked.links,
 			picture: revoked.picture,
-		} as TrimmedMessage));
+		} as TrimmedMessage);
 	},
 });
 
