@@ -7,14 +7,14 @@ import WAClient from "./lib/structures/Client";
 
 const client = new WAClient({
 	puppeteer: {
-		headless: false,
+		headless: true,
 		args: [
 			"--disable-gpu",
 			"--disable-dev-shm-usage",
 			"--disable-setuid-sandbox",
 			"--no-sandbox",
 		],
-		executablePath: "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+		executablePath: process.env.EXECUTABLE_PATH,
 	},
 	authStrategy: new LocalAuth(),
 });
