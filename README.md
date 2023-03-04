@@ -9,3 +9,5 @@ Also, my first project using TypeScript
 # Self Hosting
 
 The bot is made easy to self-host, but I will not give assistance if you encounter any troubles trying to self-host.
+
+Hello!
