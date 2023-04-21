@@ -20,6 +20,7 @@ new Command({
 				results: ["r"],
 				knowledge: ["k"],
 				snippet: ["s"],
+				page: ["p"],
 			},
 		});
 
@@ -157,7 +158,7 @@ new Command({
 			client.log.error(error);
 			return ctx.reply("An error has occurred whilst trying to search.");
 		}
-		return "e";
+		return "ee";
 	},
 });
 
