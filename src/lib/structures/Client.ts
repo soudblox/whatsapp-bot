@@ -3,7 +3,6 @@ import { Listeners } from "../managers/ListenerManager";
 import { Client, ClientOptions } from "whatsapp-web.js";
 import { Database } from "quickmongo";
 import { QuickDB } from "quick.db";
-// @ts-expect-error
 import { ConsoleTransport, FileTransport, Logger } from "leekslazylogger";
 import * as config from "../../config";
 
@@ -28,6 +27,11 @@ export default class WAClient extends Client {
 				new ConsoleTransport(),
 				new FileTransport(),
 			],
+		});
+
+		this.database.connect();
+		this.database.on("ready", () => {
+			this.log.success("[DATABASE] Connection to the database has been successfully established.");
 		});
 	}
 }

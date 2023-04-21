@@ -17,13 +17,18 @@ interface User {
 	}>;
 }
 
+// just so that i don't use the 'any' type
+interface rawData {
+	notifyName: string;
+}
+
 new Listener({
 	name: "message_create",
 	async run(client: WAClient, message: Message) {
 		handleMessage(client, message)
 			.then()
 			.catch((err) => {
-				client.log.error(`[COMMANDS] Error: ${err.toString()}`);
+				client.log.error(`[COMMANDS] Error: ${err.stack}`);
 			});
 	},
 });
@@ -37,7 +42,7 @@ async function handleMessage(client: WAClient, message: Message) {
 	message.content = content;
 	const group = message.fromMe ? message.to : message.from;
 	const userId: string = message.fromMe ? message.from : message.author || "00000000@c";
-	const username = message.contact.name || message.contact.pushname || "Unknown";
+	const username = message.contact.name || message.contact.pushname || (message.rawData as rawData).notifyName || "Unknown";
 	message.user = {
 		id: userId,
 		name: username,
@@ -62,7 +67,7 @@ async function handleMessage(client: WAClient, message: Message) {
 				client.log.info(`[COMMANDS] ${username} (${await client.getFormattedNumber(contact.number)}) used the command ${command.name}`);
 			})
 			.catch((err) => {
-				client.log.error(`[COMMANDS] Error: ${err.toString()}`);
+				client.log.error(`[COMMANDS] Error: ${err.stack}`);
 				return message.reply(`An error has occurred while executing the command ${command.name}`);
 			});
 	}

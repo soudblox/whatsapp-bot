@@ -7,13 +7,7 @@ import WAClient from "./lib/structures/Client";
 
 const client = new WAClient({
 	puppeteer: {
-		headless: true,
-		args: [
-			"--disable-gpu",
-			"--disable-dev-shm-usage",
-			"--disable-setuid-sandbox",
-			"--no-sandbox",
-		],
+		headless: false,
 		executablePath: process.env.EXECUTABLE_PATH,
 	},
 	authStrategy: new LocalAuth(),
@@ -24,6 +18,37 @@ const client = new WAClient({
 	await Commands.initiate(client);
 	await loadAll();
 })();
+
+client.getLastSeen = function getLastSeen(chId: string) {
+	return client.pupPage?.evaluate(cId => {
+		const getLastS = (chatId: string) => {
+			return new Promise(resolve => {
+				// @ts-expect-error
+				const chat = window.Store.Chat.get(chatId);
+				chat.presence.subscribe()
+					.then(() => {
+						if (chat.presence.chatstate.t) {
+							return resolve(chat.presence.chatstate.t);
+						}
+
+						let timeout: number;
+						const handle = () => {
+							clearTimeout(timeout);
+							resolve(chat.presence.chatstate.t);
+						};
+
+						setTimeout(() => {
+							chat.presence.chatstate.off("all", handle);
+							resolve(undefined);
+						}, 15000);
+
+						chat.presence.chatstate.once("all", handle);
+					});
+			});
+		};
+		return getLastS(cId);
+	}, chId);
+};
 
 client.initialize();
 
@@ -41,5 +66,9 @@ declare module "whatsapp-web.js" {
 			id?: string;
 			name?: string;
 		};
+	}
+
+	interface Client {
+		getLastSeen: any;
 	}
 }
