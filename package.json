@@ -16,14 +16,14 @@
 		"quickmongo": "^5.2.0",
 		"typescript": "^4.9.5",
 		"undici": "^5.22.0",
-		"whatsapp-web.js": "^1.19.5",
+		"whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#webpack-exodus",
 		"yargs-parser": "^21.1.1"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",
 		"@types/mime-types": "^2.1.1",
-		"@types/normalize-path": "^3.0.0",
 		"@types/node": "^18.15.13",
+		"@types/normalize-path": "^3.0.0",
 		"@types/qrcode": "^1.5.0",
 		"@types/yargs-parser": "^21.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.46.1",
